@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Qvideo Downloader</title>
+		<link rel="stylesheet" href="assets/css/style.min.css" />
+	</head>
+	<body>
+		<a class="visually-hidden" href="#main">Skip to main content</a>
+
+		<header>
+			<div class="container nav" role="navigation" aria-label="Primary">
+				<a class="brand" href="#" aria-label="Homepage">
+					<img class="logo" src="assets/img/Qvideo_logo.png" width="32" height="32" alt="" />
+					<span>Qvideo Downloader</span>
+				</a>
+
+				<nav class="links" aria-label="Site">
+					<a href="https://devquantumstudio.github.io/QvideoDownloader/" target="_blank">Official Website</a>
+					<a class="nav-cta" href="https://ko-fi.com/devquantumstudio" target="_blank" rel="noopener noreferrer">Donate</a>
+				</nav>
+
+				<button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu" aria-label="Toggle menu">
+					<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+						<path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+					</svg>
+				</button>
+			</div>
+		</header>
+
+		<main id="main" class="container">
+			<section class="hero card" id="features">
+				<h1>Fast, Free Video Downloader</h1>
+				<p>No ads, no clutter — just download.</p>
+			</section>
+
+			<section class="panel-grid">
+				<div class="embed card" aria-label="Download panel">
+					<h2 class="visually-hidden">Downloader</h2>
+
+					<div class="dl-form">
+						<div class="field">
+							<label for="link">URL</label>
+							<input type="url" id="link" placeholder="Paste video or playlist URL" oninput="checkURL();" onclick="pasteClipboard();" />
+						</div>
+
+						<div class="field">
+							<label for="format">Format</label>
+							<select id="format">
+								<optgroup label="Audio">
+									<option value="mp3">MP3</option>
+									<option value="m4a">M4A</option>
+									<option value="webm">WEBM</option>
+									<option value="aac">AAC</option>
+									<option value="flac">FLAC</option>
+									<option value="opus">OPUS</option>
+									<option value="ogg">OGG</option>
+									<option value="wav">WAV</option>
+								</optgroup>
+								<optgroup label="Video">
+									<option value="144">MP4 (144p)</option>
+									<option value="240">MP4 (240p)</option>
+									<option value="360">MP4 (360p)</option>
+									<option value="480">MP4 (480p)</option>
+									<option value="720">MP4 (720p)</option>
+									<option value="1080">MP4 (1080p)</option>
+									<option value="1440">MP4 (1440p)</option>
+									<option value="4k">MP4 (4K)</option>
+								</optgroup>
+							</select>
+						</div>
+
+						<div class="btn-row">
+							<button class="btn-primary" id="load" onclick="d();">Download</button>
+							<button onclick="refreshPage();" class="btn-secondary">Reset</button>
+						</div>
+
+						<div id="ds"></div>
+					</div>
+				</div>
+
+				<aside class="tips card">
+					<h2>Tips</h2>
+					<ul>
+						<li><span class="bullet">1</span><span>Paste a full video or playlist URL. Most platforms are supported.</span></li>
+						<li>
+							<span class="bullet">2</span><span>Choose the format/quality you need, then hit <strong>Download</strong>.</span>
+						</li>
+						<li><span class="bullet">3</span><span>Your results appear below the button. Multiple results will stack there if you add more.</span></li>
+						<li><span class="bullet">4</span><span>Watch the progress bar there, then click to download.</span></li>
+					</ul>
+				</aside>
+			</section>
+		</main>
+
+		<footer>
+			<div class="container foot">
+				<small>© <span id="year"></span> DevQuantum Studio. All rights reserved.</small>
+				<span class="version">App version: <strong>1.1</strong></span>
+			</div>
+		</footer>
+
+		<script src="assets/js/script.js" defer></script>
+
+		<script>
+			(function () {
+			  const root = document.getElementById('ds');
+			  if (!root) return;
+
+			  function stripOnclick(scope) {
+			    scope.querySelectorAll('a[onclick]').forEach(a => {
+			      a.removeAttribute('onclick');
+			      a.onclick = null;
+			    });
+			  }
+			  stripOnclick(root);
+
+			  const mo = new MutationObserver((mutations) => {
+			    for (const m of mutations) {
+			      if (m.type === 'attributes' && m.attributeName === 'onclick' && m.target.tagName === 'A') {
+			        m.target.removeAttribute('onclick');
+			        m.target.onclick = null;
+			      }
+			      m.addedNodes.forEach(node => {
+			        if (node.nodeType === 1) {
+			          if (node.matches?.('a[onclick]')) { node.removeAttribute('onclick'); node.onclick = null; }
+			          if (node.querySelectorAll) stripOnclick(node);
+			        }
+			      });
+			    }
+			  });
+			  mo.observe(root, { subtree: true, childList: true, attributes: true, attributeFilter: ['onclick'] });
+
+			  // Year in footer
+			  document.getElementById('year').textContent = new Date().getFullYear();
+			})();
+		</script>
+		<script>
+			function refreshPage() {
+				location.reload();
+			}
+			document.addEventListener('keydown', function (e) {
+				if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
+					e.preventDefault();
+					refreshPage();
+				}
+			});
+			function pasteClipboard() {
+				navigator.clipboard.readText().then(function(text) {
+					document.getElementById('link').value = text;
+				}).catch(function(err) {
+					console.error('Failed to read clipboard contents: ', err);
+				});
+			}
+		</script>
+	</body>
+</html>
