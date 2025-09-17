@@ -24,7 +24,7 @@ jobs:
           pip install pyinstaller pywebview
 
       - name: Build app with PyInstaller
-        run: pyinstaller --onefile --windowed --icon=Qvideo.ico --add-data "public/index.html:public" --add-data "public/assets/css/style.min.css:public/assets/css" --add-data "public/assets/js/script.js:public/assets/js" --add-data "public/assets/img/Qvideo_logo.png:public/assets/img" --add-data "version_info.txt:." --version-file=version_info.txt main.py
+        run: pyinstaller --onefile --windowed --icon=Qvideo.icns --add-data "public/index.html:public" --add-data "public/assets/css/style.min.css:public/assets/css" --add-data "public/assets/js/script.js:public/assets/js" --add-data "public/assets/img/Qvideo_logo.png:public/assets/img" --add-data "version_info.txt:." --version-file=version_info.txt main.py
 
       - name: List build output
         run: ls -l dist/
